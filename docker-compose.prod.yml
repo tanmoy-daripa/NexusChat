@@ -1,0 +1,20 @@
+version: '3.9'
+
+# Production override — builds optimized images, no volume mounts
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production   # uses multi-stage nginx static build
+    environment:
+      - NODE_ENV=production
+    volumes: []            # no hot-reload mounts in production
+
+  backend:
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_OPTS: "-Xms256m -Xmx512m -XX:+UseContainerSupport"
+
+  db:
+    ports: []              # don't expose DB port in production

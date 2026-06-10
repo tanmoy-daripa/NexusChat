@@ -1,0 +1,100 @@
+
+services:
+  # ── MySQL Database ──────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: nexuschat-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-chatdb}
+      MYSQL_USER: ${DB_USERNAME:-chatuser}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-chatpassword}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - nexuschat-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ── Spring Boot Backend ─────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexuschat-backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-chatdb}
+      DB_USERNAME: ${DB_USERNAME:-chatuser}
+      DB_PASSWORD: ${DB_PASSWORD:-chatpassword}
+      JWT_SECRET: ${JWT_SECRET:-dGhpcy1pcy1hLXN1cGVyLXNlY3JldC1qd3Qta2V5LWZvci1uZXh1c2NoYXQtMjAyNg==}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION:-604800000}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - nexuschat-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+  # ── React Frontend ──────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: nexuschat-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: /api
+      VITE_WS_URL: /ws
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - nexuschat-net
+
+  # ── Nginx Reverse Proxy ─────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: nexuschat-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - nexuschat-net
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  nexuschat-net:
+    driver: bridge
