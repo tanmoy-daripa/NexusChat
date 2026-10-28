@@ -1,4 +1,4 @@
-# 💬 NexusChat — Real-Time Chat Application
+#  NexusChat — Real-Time Chat Application
 
 A full-stack real-time chat application built with **Spring Boot 3** + **React + Vite**, powered by **WebSocket/STOMP**, secured with **JWT**, and deployable via **Docker Compose + Nginx**.
 
