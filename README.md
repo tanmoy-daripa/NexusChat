@@ -4,7 +4,7 @@ A full-stack real-time chat application built with **Spring Boot 3** + **React +
 
 ---
 
-## 🏗️ Tech Stack
+##  Tech Stack
 
 | Layer       | Technology                                        |
 |-------------|---------------------------------------------------|
@@ -18,7 +18,7 @@ A full-stack real-time chat application built with **Spring Boot 3** + **React +
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 chat-app/
@@ -57,7 +57,7 @@ chat-app/
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Docker & Docker Compose installed
@@ -113,7 +113,7 @@ npm run dev
 
 ---
 
-## 🔐 API Reference
+##  API Reference
 
 ### Auth
 | Method | Endpoint             | Description        |
@@ -160,25 +160,25 @@ Authorization: Bearer <access_token>
 
 ---
 
-## ✨ Features
+##  Features
 
-- 🔐 JWT auth with refresh token rotation
-- 💬 Real-time messaging via WebSocket (STOMP/SockJS)
-- ⌨️ Live typing indicators
-- 🟢 Online / Away / Offline user presence
-- 📋 Public room browser + join/leave
-- 💌 Direct messages between users
-- 🏠 Create public or private rooms
-- 👤 Profile editor (display name, status, avatar)
-- 📜 Paginated message history
-- 🎨 Dark glassmorphism UI with smooth animations
-- 🐳 Full Docker Compose orchestration
-- 🔁 Nginx reverse proxy (HTTP + WebSocket)
-- 🌱 Auto-seeded default rooms on first start
+-  JWT auth with refresh token rotation
+-  Real-time messaging via WebSocket (STOMP/SockJS)
+-  Live typing indicators
+-  Online / Away / Offline user presence
+-  Public room browser + join/leave
+-  Direct messages between users
+-  Create public or private rooms
+-  Profile editor (display name, status, avatar)
+-  Paginated message history
+-  Dark glassmorphism UI with smooth animations
+-  Full Docker Compose orchestration
+-  Nginx reverse proxy (HTTP + WebSocket)
+-  Auto-seeded default rooms on first start
 
 ---
 
-## 🐳 Docker Services
+##  Docker Services
 
 | Container            | Image             | Purpose                       |
 |----------------------|-------------------|-------------------------------|
@@ -189,7 +189,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 🛡️ Security
+##  Security
 
 - Passwords hashed with **BCrypt**
 - JWT signed with **HMAC-SHA256**
@@ -199,7 +199,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 📝 Environment Variables
+##  Environment Variables
 
 | Variable              | Default                        | Description                  |
 |-----------------------|--------------------------------|------------------------------|
